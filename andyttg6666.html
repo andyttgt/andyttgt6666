@@ -1,1 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>吉翊聿 · 硬體玩家 / 未來軟體工程師</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            background: #eef2f8;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: #1e2f3e;
+            line-height: 1.5;
+        }
+
+        /* 主佈局：不對稱雙欄 + 卡片層次 */
+        .dashboard {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* ========= 左側側邊欄 — 個人形象集中區 ========= */
+        .sidebar {
+            background: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            position: sticky;
+            top: 2rem;
+            transition: transform 0.2s;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #0f2b3d 0%, #1f4a6e 100%);
+            padding: 2rem 1.5rem 1.8rem;
+            text-align: center;
+            color: white;
+        }
+
+        /* 頭像區塊 - 現代圓形浮凸 */
+        .avatar-large {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 1.2rem;
+            border-radius: 50%;
+            background: #e2e8f0;
+            border: 4px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 15px 25px -8px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .avatar-large:hover {
+            transform: scale(1.02);
+        }
+        .avatar-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .avatar-placeholder-large {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #3b82f6, #1e3a8a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .sidebar-name {
+            font-size: 1.9rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.3rem;
+        }
+        .sidebar-title {
+            font-size: 0.85rem;
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-weight: 500;
+            backdrop-filter: blur(2px);
+        }
+        .contact-compact {
+            margin-top: 1.5rem;
+            background: rgba(0,0,0,0.15);
+            border-radius: 1.5rem;
+            padding: 0.8rem;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+        .contact-compact div {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 0.6rem;
+            word-break: break-all;
+        }
+        .contact-compact div:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 左側興趣標籤 / 技能區 */
+        .interest-section {
+            padding: 1.8rem 1.5rem;
+        }
+        .side-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #1f4a6e;
+            border-left: 4px solid #3b82f6;
+            padding-left: 0.8rem;
+        }
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 1.8rem;
+        }
+        .skill-tag {
+            background: #eef2ff;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+        .hobby-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .hobby-item {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 0.9rem;
+        }
+
+        /* ========= 右側主內容區 — 故事與經歷 ========= */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* 通用卡片風格 */
+        .card-modern {
+            background: #ffffff;
+            border-radius: 1.8rem;
+            box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+            overflow: hidden;
+            border: 1px solid #eef2fa;
+        }
+        .card-inner {
+            padding: 1.8rem 2rem;
+        }
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #0f2b3d;
+            letter-spacing: -0.3px;
+        }
+        .card-title i {
+            font-size: 1.8rem;
+        }
+
+        /* 自我介紹 特殊引用風格 */
+        .bio-quote {
+            background: #f8fafd;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            font-size: 1.02rem;
+            line-height: 1.7;
+            color: #1f3b4c;
+            border-left: 6px solid #3b82f6;
+            margin-top: 0.5rem;
+        }
+
+        /* 硬體專長區塊 卡片網格 (移除軟硬整合) */
+        .skill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .skill-card-mini {
+            background: #f8fafc;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #e9edf2;
+            transition: all 0.2s;
+        }
+        .skill-card-mini:hover {
+            transform: translateY(-3px);
+            background: white;
+            box-shadow: 0 10px 18px -8px rgba(0,0,0,0.08);
+        }
+        .skill-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.4rem;
+        }
+
+        /* 聯絡資訊底部按鈕區 */
+        .contact-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.8rem;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #cbdde9;
+            padding: 0.6rem 1.4rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #1f4a6e;
+            text-decoration: none;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-outline:hover {
+            background: #eef2ff;
+            border-color: #3b82f6;
+        }
+        .btn-primary-solid {
+            background: #0f2b3d;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.8rem;
+            border-radius: 60px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: 0.2s;
+        }
+        .btn-primary-solid:hover {
+            background: #1e4a6e;
+            transform: translateY(-2px);
+        }
+
+        /* 響應式 */
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .sidebar {
+                position: static;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            .main-content {
+                width: 100%;
+            }
+            body {
+                padding: 1rem;
+            }
+            .dashboard {
+                margin: 1rem auto;
+                padding: 0;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .card-inner {
+                padding: 1.2rem;
+            }
+            .card-title {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* 淡入動畫 */
+        .dashboard > * {
+            animation: fadeSlide 0.5s ease-out;
+        }
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <!-- 左側側邊欄 : 個人形象+聯絡濃縮 -->
+    <aside class="sidebar">
+        <div class="profile-header">
+            <div class="avatar-large" id="sideAvatar">
+                <img class="avatar-img-side" src="photo.png" alt="吉翊聿" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="avatar-placeholder-large" style="display: none;">吉</div>
+            </div>
+            <div class="sidebar-name">吉翊聿</div>
+            <div class="sidebar-title">Chi Yi-Yu · 資管系</div>
+            <div class="contact-compact">
+                <div>📞 0979-851-788</div>
+                <div>✉️ andyttgt@gmail.com</div>
+                <div>📍 台中潭子區 · 台灣</div>
+            </div>
+        </div>
+        <div class="interest-section">
+            <div class="side-title">⚙️ 核心領域</div>
+            <div class="skill-tags">
+                <span class="skill-tag">🔧 硬體維修</span>
+                <span class="skill-tag">🖥️ 組裝電腦</span>
+                <span class="skill-tag">💻 系統優化</span>
+                <span class="skill-tag">🐍 Python/前端</span>
+                <span class="skill-tag">📊 資料庫設計</span>
+            </div>
+            <div class="side-title">❤️ 熱愛事物</div>
+            <div class="hobby-list">
+                <div class="hobby-item">🛠️ 故障排除 & 硬體改裝</div>
+                <div class="hobby-item">📖 開源技術研究</div>
+                <div class="hobby-item">🎮 PC組裝藝術</div>
+                <div class="hobby-item">☕ 軟硬體整合專案</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 右側主要內容區塊 (精簡且聚焦，已刪除累積實戰成績與軟硬整合) -->
+    <div class="main-content">
+        <!-- 自我介紹 區塊 -->
+        <div class="card-modern">
+            <div class="card-inner">
+                <div class="card-title">
+                    <span>✨ 關於我 · 從硬體到軟體的旅程</span>
+                </div>
+                <div class="bio-quote">
+                    我是吉翊聿，靜宜大學資訊管理學系在學生。從小迷戀電腦結構，高中開始組裝屬於自己的主機，也因此愛上硬體世界的每個細節。<br><br>
+                    大學接觸程式設計、資料庫與運籌管理後，我看見軟硬體交織的力量 — 不只是維修電腦，更渴望寫出流暢、直覺的產品。平時除了在實驗室拆裝主機，也透過線上課程與社群累積實戰經驗。<br><br>
+                    「好的工程師打造工具，偉大的工程師打造改變習慣的產品」 — 我希望未來能成為後者，創造方便且富有溫度的數位解決方案。
+                </div>
+            </div>
+        </div>
+
+        <!-- 硬體專長 & 技能展示卡片網格 (已移除「軟硬整合」項目) -->
+        <div class="card-modern">
+            <div class="card-inner">
+                <div class="card-title">
+                    <span>🔩 專業亮點 · 硬體魂</span>
+                </div>
+                <div class="skill-grid">
+                    <div class="skill-card-mini">
+                        <div class="skill-icon">🖥️</div>
+                        <div style="font-weight: 700;">組裝規劃</div>
+                        <div style="font-size: 0.75rem;">零件搭配、散熱配置</div>
+                    </div>
+                    <div class="skill-card-mini">
+                        <div class="skill-icon">🔧</div>
+                        <div style="font-weight: 700;">故障診斷</div>
+                        <div style="font-size: 0.75rem;">除錯卡、電源檢測</div>
+                    </div>
+                    <div class="skill-card-mini">
+                        <div class="skill-icon">⚡</div>
+                        <div style="font-weight: 700;">超頻調校</div>
+                        <div style="font-size: 0.75rem;">BIOS優化、效能平衡</div>
+                    </div>
+                    <!-- 原「軟硬整合」卡片已刪除 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 聯絡 & 社群互動區塊 -->
+        <div class="card-modern">
+            <div class="card-inner">
+                <div class="card-title">
+                    <span>📬 交流與合作</span>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
+                    <div>
+                        <p style="margin-bottom: 0.6rem;">📧 電子郵件：<strong>andyttgt@gmail.com</strong></p>
+                        <p>📞 聯絡電話：<strong>0979-851-788</strong> (歡迎技術交流)</p>
+                    </div>
+                    <div class="contact-buttons">
+                        <a href="index.html" class="btn-primary-solid">
+                            🏠 返回首頁
+                        </a>
+                        <a href="#" class="btn-outline" id="copyEmailBtn">
+                            📋 複製 Email
+                        </a>
+                    </div>
+                </div>
+                <div class="small-hint" style="margin-top: 1rem; font-size: 0.7rem; color: #6c86a3; background: #f0f4fa; padding: 0.4rem 0.8rem; border-radius: 60px; display: inline-block;">
+                    ✨ 硬體討論 / 軟體合作皆可來信 — 期待與你激盪火花
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // 處理頭像降級 (左側)
+        const sideImg = document.querySelector('.avatar-img-side');
+        const sidePlaceholder = document.querySelector('.avatar-placeholder-large');
+        
+        const showSideFallback = () => {
+            if (sideImg && sideImg.style.display !== 'none') {
+                sideImg.style.display = 'none';
+                if (sidePlaceholder) {
+                    sidePlaceholder.style.display = 'flex';
+                }
+            }
+        };
+        
+        if (sideImg) {
+            if (sideImg.complete && (sideImg.naturalWidth === 0 || !sideImg.naturalWidth)) {
+                showSideFallback();
+            } else {
+                sideImg.addEventListener('error', showSideFallback);
+            }
+        } else if (sidePlaceholder) {
+            sidePlaceholder.style.display = 'flex';
+        }
+        
+        window.addEventListener('load', function() {
+            if (sideImg && sideImg.style.display !== 'none' && (sideImg.naturalWidth === 0 || sideImg.naturalHeight === 0)) {
+                showSideFallback();
+            }
+        });
+        
+        // 複製 email 功能 (互動加分)
+        const copyBtn = document.getElementById('copyEmailBtn');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const email = "andyttgt@gmail.com";
+                navigator.clipboard.writeText(email).then(() => {
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = "✅ 已複製！";
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                    }, 2000);
+                }).catch(() => {
+                    alert("手動複製 email：" + email);
+                });
+            });
+        }
+    })();
+</script>
+</body>
+</html>
