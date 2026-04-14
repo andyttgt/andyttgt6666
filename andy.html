@@ -23,6 +23,7 @@
             padding: 50px 20px;
             display: flex;
             justify-content: center;
+            position: relative;
         }
 
         .report-wrapper {
@@ -30,10 +31,11 @@
             width: 100%;
         }
 
-        /* --- Header Section --- */
+        /* --- Header Section with Back Button --- */
         .header {
             text-align: center;
             margin-bottom: 60px;
+            position: relative;
         }
 
         .header h1 {
@@ -48,6 +50,35 @@
             color: var(--gray-text);
             font-weight: 300;
             margin-top: 10px;
+        }
+
+        /* 返回首頁按鈕樣式 - 置於右上角 */
+        .back-home-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(246, 173, 85, 0.4);
+            color: var(--accent-gold);
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-home-btn:hover {
+            background: var(--accent-gold);
+            color: var(--primary-dark);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(246, 173, 85, 0.3);
         }
 
         /* --- Main Flex Layout --- */
@@ -171,6 +202,18 @@
             .grid-container { grid-template-columns: 1fr; }
             .header h1 { font-size: 2.5rem; }
             .main-letter { font-size: 8rem; }
+            .back-home-btn {
+                position: relative;
+                margin-bottom: 20px;
+                display: inline-flex;
+                justify-content: center;
+                width: fit-content;
+            }
+            .header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
@@ -178,6 +221,8 @@
 
 <div class="report-wrapper">
     <header class="header">
+        <!-- 返回首頁按鈕 -->
+        <button class="back-home-btn" id="backToHomeBtn">🏠 返回首頁</button>
         <p>CAREER ASSESSMENT REPORT</p>
         <h1>My Holland Code</h1>
     </header>
@@ -284,6 +329,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    // 返回首頁按鈕功能：導向 index.html
+    document.getElementById('backToHomeBtn').addEventListener('click', function() {
+        window.location.href = 'index.html';
+    });
+</script>
 
 </body>
 </html>
