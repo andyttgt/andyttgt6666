@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holland Code 分析報告</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #121212;
+            --accent-gold: #f6ad55;
+            --soft-white: #f8f9fa;
+            --gray-text: #a0aec0;
+            --card-glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--primary-dark);
+            font-family: 'Noto Sans TC', sans-serif;
+            color: var(--soft-white);
+            padding: 50px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .report-wrapper {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* --- Header Section --- */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5rem;
+            letter-spacing: 4px;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+        }
+
+        .header p {
+            color: var(--gray-text);
+            font-weight: 300;
+            margin-top: 10px;
+        }
+
+        /* --- Main Flex Layout --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+        }
+
+        /* --- Left Side: Hero Result --- */
+        .hero-result {
+            background: var(--card-glass);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 50px;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .main-letter {
+            font-family: 'Oswald', sans-serif;
+            font-size: 10rem;
+            line-height: 1;
+            background: linear-gradient(to bottom, var(--accent-gold), #ed8936);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-type {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-top: -10px;
+        }
+
+        .hero-desc {
+            margin-top: 30px;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--gray-text);
+        }
+
+        /* --- Right Side: Statistics Grid --- */
+        .stats-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(10px);
+        }
+
+        .stat-card.active {
+            border-left: 4px solid var(--accent-gold);
+            background: rgba(246, 173, 85, 0.1);
+        }
+
+        .type-info { width: 100px; }
+        .type-info .code { font-family: 'Oswald', sans-serif; font-size: 1.5rem; }
+        .type-info .label { font-size: 0.8rem; color: var(--gray-text); }
+
+        /* Progress Bar Styling */
+        .progress-box {
+            flex-grow: 1;
+            margin: 0 30px;
+        }
+
+        .bar-bg {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: var(--gray-text);
+            transition: width 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+
+        .active .bar-fill { background: var(--accent-gold); }
+
+        .score-info {
+            text-align: right;
+            width: 80px;
+        }
+
+        .score-info .val { font-family: 'Oswald', sans-serif; font-size: 1.2rem; display: block; }
+        .score-info .pr { font-size: 0.75rem; color: var(--gray-text); }
+
+        /* --- Footer Info --- */
+        .footer-note {
+            grid-column: span 2;
+            margin-top: 40px;
+            padding: 30px;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+            color: var(--gray-text);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 850px) {
+            .grid-container { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2.5rem; }
+            .main-letter { font-size: 8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="report-wrapper">
+    <header class="header">
+        <p>CAREER ASSESSMENT REPORT</p>
+        <h1>My Holland Code</h1>
+    </header>
+
+    <div class="grid-container">
+        <section class="hero-result">
+            <div class="main-letter">R</div>
+            <div class="main-type">實用型 Realistic</div>
+            <p class="hero-desc">
+                你的測驗結果以 <b>實用型 (R)</b> 為核心特質。
+                這代表你喜好講求實際、動手操作，並傾向在技術性或體力性的工作中尋求成就感。相較於抽象概念，你更擅長處理具體可見的事務。
+            </p>
+        </section>
+
+        <section class="stats-panel">
+            <div class="stat-card active">
+                <div class="type-info">
+                    <div class="code">R</div>
+                    <div class="label">實用型</div>
+                </div>
+                <div class="progress-box">
+                    <div class="bar-bg"><div class="bar-fill" style="width: 25%;"></div></div>
+                </div>
+                <div class="score-info">
+                    <span class="val">3 / 12</span>
+                    <span class="pr">PR 32</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="type-info">
+                    <div class="code">A</div>
+                    <div class="label">藝術型</div>
+                </div>
+                <div class="progress-box">
+                    <div class="bar-bg"><div class="bar-fill" style="width: 17%;"></div></div>
+                </div>
+                <div class="score-info">
+                    <span class="val">2 / 12</span>
+                    <span class="pr">PR 29</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="type-info">
+                    <div class="code">E</div>
+                    <div class="label">企業型</div>
+                </div>
+                <div class="progress-box">
+                    <div class="bar-bg"><div class="bar-fill" style="width: 17%;"></div></div>
+                </div>
+                <div class="score-info">
+                    <span class="val">2 / 12</span>
+                    <span class="pr">PR 32</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="type-info">
+                    <div class="code">I</div>
+                    <div class="label">研究型</div>
+                </div>
+                <div class="progress-box">
+                    <div class="bar-bg"><div class="bar-fill" style="width: 17%;"></div></div>
+                </div>
+                <div class="score-info">
+                    <span class="val">2 / 12</span>
+                    <span class="pr">PR 23</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="type-info">
+                    <div class="code">S</div>
+                    <div class="label">社會型</div>
+                </div>
+                <div class="progress-box">
+                    <div class="bar-bg"><div class="bar-fill" style="width: 17%;"></div></div>
+                </div>
+                <div class="score-info">
+                    <span class="val">2 / 12</span>
+                    <span class="pr">PR 22</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="type-info">
+                    <div class="code">C</div>
+                    <div class="label">事務型</div>
+                </div>
+                <div class="progress-box">
+                    <div class="bar-bg"><div class="bar-fill" style="width: 0%;"></div></div>
+                </div>
+                <div class="score-info">
+                    <span class="val">0 / 12</span>
+                    <span class="pr">PR 6</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer-note">
+            註 1：PR 值代表與全國 UCAN 平台受測學生之比較等級。例如 PR92 意即您的傾向高於 92% 的受測者。<br>
+            註 2：職業性格代碼由分數最高的前 2 到 4 項類型組成，協助您更完整地探索職涯適配性。
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
